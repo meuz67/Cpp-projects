@@ -1,0 +1,48 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+        Width="400"
+        Height="450"
+        x:Class="AvaloniaApplication1.MainWindow"
+        Background="Black"
+        Foreground="White"
+        Title="Celsius to fahrenheit">
+    <StackPanel>
+        <Border Background="Aqua" CornerRadius="15">
+            <TextBlock Text="Convertor" Margin="15" HorizontalAlignment="Center" FontFamily="Robotic" FontSize="30"/>
+        </Border>
+
+        <!-- Кнопки рядом -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Foreground="White" Background="Gray" Margin="5" Click="CelsiusToFahrenheit">
+                <Button.Styles>
+                    <Style Selector="Button:pointerover">
+                        <Setter Property="Background" Value="LightGray"/>
+                    </Style>
+                </Button.Styles>
+                Celsius to fahrenheit
+            </Button>
+
+            <Button Foreground="White" Background="DarkBlue" Margin="5" Click="FahrenheitToCelsius">
+                <Button.Styles>
+                    <Style Selector="Button:pointerover">
+                        <Setter Property="Background" Value="LightGray"/>
+                    </Style>
+                </Button.Styles>
+                Fahrenheit to celsius
+            </Button>
+        </StackPanel>
+
+        <Grid ShowGridLines="True" 
+              Margin="5" 
+              ColumnDefinitions="120 100" 
+              RowDefinitions="Auto, Auto">
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="10">Celsius</TextBlock>
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Watermark="0" Foreground="Black" Name="Celsius"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" Margin="10">Fahrenheit</TextBlock>
+            <TextBox Grid.Column="1" Grid.Row="1" Margin="10" Watermark="0" Foreground="Black" Name="Fahrenheit"/>
+        </Grid>
+    </StackPanel>
+</Window>

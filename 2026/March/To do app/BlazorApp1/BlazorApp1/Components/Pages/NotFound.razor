@@ -1,0 +1,27 @@
+﻿@page "/not-found"
+@rendermode InteractiveServer
+<h1>Tasks To do: @todos.Count(todos => !todos.isDone)</h1>
+<input placeholder = "Something to do" @bind = "newToDo"/>
+<button class = "btn btn-primary" @onclick="AddToDo">Add to do</button>
+<ul>
+    @foreach (var todo in todos)
+    {
+        <li>
+            @todo.Title
+            <input type="checkbox" @bind="todo.isDone"/>
+        </li>
+    }
+</ul>
+@code{
+    private IList<ToDoItem> todos = new List<ToDoItem>();
+    private string newToDo;
+    public int numbers;
+    private void AddToDo()
+    {
+        if (!string.IsNullOrEmpty(newToDo))
+        {
+            todos.Add(new ToDoItem(){Title = newToDo});
+            newToDo = string.Empty;
+        }
+    }
+}
