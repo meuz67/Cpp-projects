@@ -1,0 +1,43 @@
+﻿@page "/demo01"
+@using BlazorApp1.Models
+@inject ContactService contactService
+
+<h3>Contacts</h3>
+<button class = "btn btn-primary" @onclick = "AddContact">Add contact</button><br/><br/>
+<input placeholder="First name" @bind = "FirstName" @bind:event="oninput"/><br/><br/>
+<input placeholder="Last name" @bind = "LastName" @bind:event="oninput"/><br/><br/>
+<input placeholder="email" @bind = "Email" @bind:event="oninput"/><br/><br/>
+@if (contactService?.ContactList == null || !contactService.ContactList.Any())
+{
+    <p class="text-muted">No contacts available</p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var item in contactService.ContactList)
+        {
+            <li class="list-group-item">
+                <strong>@item.FirstName @item.LastName</strong><br />
+                <span class="text-secondary">@item.Email</span>
+            </li>
+        }
+    </ul>
+}
+@code{
+    private string FirstName { get; set; }
+    private string LastName { get; set; }
+    private string Email { get; set; }
+    private void AddContact()
+    {
+        var contact = new Contact()
+        {
+            FirstName = FirstName,
+            LastName = LastName,
+            Email = Email
+        };
+        contactService.AddContact(contact);
+        FirstName = string.Empty;
+        LastName = string.Empty;
+        Email = string.Empty;
+    }
+}
