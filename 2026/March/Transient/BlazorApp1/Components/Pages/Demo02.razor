@@ -1,0 +1,21 @@
+﻿@page "/Demo02"
+@inject ContactService contactService
+<h3>Demo02</h3>
+@if (contactService.Contacts.Count == 0)
+{
+    <h1>No contacts to display</h1>
+}
+else
+{
+    @foreach (var c in contactService.Contacts)
+    {
+        <b>@c.FirstName @c.LastName</b>
+        <br/>
+        <i>@c.Email</i>
+        <br/>
+        <hr/>
+    }
+}
+@code {
+    
+}

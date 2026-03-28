@@ -1,0 +1,60 @@
+﻿@page "/demo01"
+@using BlazorApp1
+@inject ContactService contactServise
+
+<div class="container">
+    <div class="card">
+        <h2>📇 Contact Manager</h2>
+
+        <input placeholder="First name" @bind="firstName" />
+        <input placeholder="Last name" @bind="lastname" />
+        <input placeholder="Email" @bind="email" @onkeyup="HandleKeyDown" />
+
+        <button @onclick="AddContact">Add contact</button>
+    </div>
+
+    <div class="contacts">
+        @if (contactServise.Contacts.Count == 0)
+        {
+            <p class="empty">No contacts 😢</p>
+        }
+        else
+        {
+            @foreach (var contact in contactServise.Contacts)
+            {
+                <div class="contact-card">
+                    <p><strong>@contact.FirstName @contact.LastName</strong></p>
+                    <p>@contact.Email</p>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    private string firstName, lastname, email;
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            AddContact();
+        }
+    }
+
+    private void AddContact()
+    {
+        var contact = new Contact()
+        {
+            FirstName = firstName,
+            LastName = lastname,
+            Email = email
+        };
+
+        contactServise.Add(contact);
+
+        firstName = string.Empty;
+        lastname = string.Empty;
+        email = string.Empty;
+    }
+}
