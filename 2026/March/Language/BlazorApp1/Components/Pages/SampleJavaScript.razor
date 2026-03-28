@@ -1,0 +1,31 @@
+﻿@page "/sample-javascript"
+@inject IJSRuntime js;
+<h3>SampleJavaScript</h3>
+<br/>
+<h1>@sayHello</h1>
+<script>
+    window.GetBrowserLanguage = () => {
+        return navigator.language || navigator.userLanguage
+    };
+</script>
+@code{
+    private string language;
+    private string sayHello;
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            language = await js.InvokeAsync<string>("GetBrowserLanguage");
+            if (language.StartsWith("uk"))
+            {
+                sayHello = "Привіт";
+            }
+            else
+            {
+                sayHello = "Bye";
+            }
+            StateHasChanged();
+        }
+    }
+}
