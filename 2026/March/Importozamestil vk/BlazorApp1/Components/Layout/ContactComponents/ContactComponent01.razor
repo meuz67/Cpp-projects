@@ -1,0 +1,35 @@
+﻿<div class="card shadow-sm p-3 mb-3 bg-white rounded" style="max-width: 400px;">
+    <div class="card-body">
+        <h5 class="card-title mb-3 text-primary">
+            <i class="bi bi-person-circle"></i> Contact Info
+        </h5>
+
+        <p class="mb-2">
+            <strong>Name:</strong><br />
+            <span class="fs-5">@CurrentContact.FirstName @CurrentContact.LastName</span>
+        </p>
+        @if (displayEmail == true)
+        {
+            <p class="mb-0">
+                <strong>Email:</strong><br/>
+                <span class="text-muted">@CurrentContact.Email</span>
+            </p>
+        }
+        @if (displayInfo)
+        {
+            <span>The email addres of @CurrentContact.FirstName @CurrentContact.LastName is @CurrentContact.Email</span>
+        }
+        <br/>
+        <button @onclick = "@(() => displayInfo = !displayInfo)">Show info</button>
+    </div>
+    <button class = "btn-primary" @onclick = "@(()=>DeleteContact.InvokeAsync(CurrentContact))">Delete</button>
+</div>
+@code{
+    [Parameter]
+    public Contact CurrentContact { get; set; }
+    [Parameter] 
+    public bool displayEmail { get; set; }
+    [Parameter]
+    public EventCallback<Contact> DeleteContact { get; set; }
+    private bool displayInfo = false;
+}

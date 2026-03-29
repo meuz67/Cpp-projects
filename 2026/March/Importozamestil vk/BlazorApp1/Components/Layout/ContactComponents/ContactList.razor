@@ -1,0 +1,24 @@
+﻿@if (contacts is null)
+{
+    <span>Contacts are loading</span>
+}
+else if (contacts.Count == 0)
+{
+    <span>No contacts to display</span>
+}
+else
+{
+    @foreach (var contact in contacts)
+    {
+        <ContactComponent01 CurrentContact="contact" displayEmail = "@displayEmail" DeleteContact="@DeleteContact"></ContactComponent01>
+    }
+}
+@code{
+    [Parameter] public List<Contact> contacts { get; set; }
+    private bool displayEmail = true;
+
+    private void DeleteContact(Contact c)
+    {
+        contacts.Remove(c);
+    }
+}
