@@ -1,0 +1,20 @@
+﻿@model Product
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+
+    <div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control mb-3" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    
+    <div>
+        <label asp-for="Price"></label>
+        <input asp-for="Price" class="form-control mb-3" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
