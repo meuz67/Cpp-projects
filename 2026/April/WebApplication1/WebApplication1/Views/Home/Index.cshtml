@@ -1,0 +1,79 @@
+﻿@model List<Phone>
+@{
+    ViewData["Title"] = "Phones";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">📱 Product Catalog</h2>
+
+        <a asp-controller="Home" asp-action="Create" class="btn btn-success shadow-sm">
+            + Create
+        </a>
+    </div>
+
+    <div class="card shadow border-0">
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="ps-4">Id</th>
+                            <th>Name</th>
+                            <th class="text-end pe-4">Price</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    @foreach (var phone in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 text-muted">#@phone.Id</td>
+
+                            <td class="fw-semibold">
+                                @phone.Name
+                            </td>
+
+                            <td class="text-end pe-4">
+                                <span class="badge bg-success fs-6 px-3 py-2">
+                                    @phone.Price.ToString("C")
+                                </span>
+                            </td>
+
+                            <td class="text-center">
+
+                                <a asp-controller="Home"
+                                   asp-action="Edit"
+                                   asp-route-id="@phone.Id"
+                                   class="btn btn-sm btn-outline-primary me-2">
+                                    Edit
+                                </a>
+
+                                <form asp-action="Delete"
+                                      asp-route-id="@phone.Id"
+                                      method="post"
+                                      class="d-inline">
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Are you sure you want to delete this item?');">
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
