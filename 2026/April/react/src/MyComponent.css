@@ -1,0 +1,13 @@
+.cube{
+    height: 400px;
+    width: 400px;
+    background-color: red;
+    justify-content: center;
+    margin:auto;
+}
+.colorInput{
+    margin: auto;
+    justify-content: center;
+    display: flex;
+    margin-top: 15px;
+}
