@@ -1,14 +1,14 @@
 import { useState } from "react";
-import "./App.css"
 function MyComponent() {
-    const [count, setCount] = useState(0);
-    return(
-        <div class="stuff">
-            <h1>Count: {count}</h1>
-            <button onClick={() => setCount(count + 1)}>Increment</button>
-            <button onClick={()=>setCount(count - 1 )}>Decrement</button>
-            <button onClick={()=>setCount(0)}>Reset</button>
+    const [someValue, setSomeValue] = useState(0);
+
+    return (
+        <div>
+            <input type = "checkbox" onChange={() => setSomeValue(someValue+1)}></input>
+            {Array.from({ length: someValue }, (_, i) => (
+                <p key={i}>{someValue}</p>
+            ))}
         </div>
-    )
+    );
 }
 export default MyComponent;
