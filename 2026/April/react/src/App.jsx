@@ -1,9 +1,8 @@
-import { useState } from "react"
-import MyComponent from "./MyComponent"
+import ToDoList from "./ToDoList.jsx"
 function App() {
   return(
     <>
-    <MyComponent />
+    <ToDoList />
     </>
   )
 }
