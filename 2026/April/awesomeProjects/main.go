@@ -1,52 +1,57 @@
 package main
 
 import (
-	"awesomeprojects/miner"
-	"awesomeprojects/postman"
-	"context"
 	"fmt"
+	"io"
+	"net/http"
+	"strconv"
 	"sync"
-	"time"
 )
 
+var mtx = sync.Mutex{}
+var money = 1000
+var bankMoney = 0
+
+func payHandler(w http.ResponseWriter, r *http.Request) {
+	httpRequstBody, err := io.ReadAll(r.Body)
+	if err != nil {
+		fmt.Println("Error reading body:", err)
+	}
+	amount, err := strconv.ParseInt(string(httpRequstBody), 10, 64)
+	if err != nil {
+		fmt.Println("Failed to parse amount")
+	}
+	mtx.Lock()
+	if amount <= int64(money) {
+		money -= int(amount)
+	}
+	mtx.Unlock()
+	fmt.Println("Money:", money)
+}
+func saveHandler(w http.ResponseWriter, r *http.Request) {
+	httpRequestBody, err := io.ReadAll(r.Body)
+	if err != nil {
+		fmt.Println("Error reading body:", err)
+	}
+	amount, err := strconv.ParseInt(string(httpRequestBody), 10, 64)
+	if err != nil {
+		fmt.Println("Failed to parse amount")
+	}
+	mtx.Lock()
+	if amount <= int64(money) {
+		money -= int(amount)
+		bankMoney += int(amount)
+	}
+	mtx.Unlock()
+	fmt.Println("Money:", money)
+	fmt.Println("Bank money:", bankMoney)
+}
 func main() {
-	closed := sync.RWMutex{}
-	var coal int
-	var mails []string
-	minerContext, minerCancel := context.WithCancel(context.Background())
-	postmanContext, postmanCancel := context.WithCancel(context.Background())
-	go func() {
-		time.Sleep(3 * time.Second)
-		minerCancel()
-	}()
-	go func() {
-		time.Sleep(6 * time.Second)
-		postmanCancel()
-	}()
-	coalTransferPoint := miner.MinerPool(minerContext, 10)
-	mailTransferPoint := postman.PostmanPool(postmanContext, 10)
-	wg := &sync.WaitGroup{}
-	wg.Add(1)
-	go func() {
-		closed.Lock()
-		defer wg.Done()
-		for v := range coalTransferPoint {
-			coal += v
-		}
-		closed.Unlock()
-	}()
-	wg.Add(1)
-	go func() {
-		closed.Lock()
-		defer wg.Done()
-		for v := range mailTransferPoint {
-			mails = append(mails, v)
-		}
-		closed.Unlock()
-	}()
-	wg.Wait()
-	closed.RLock()
-	fmt.Println("coal:", coal)
-	fmt.Println("mails:", len(mails))
-	closed.RUnlock()
+	http.HandleFunc("/", payHandler)
+	http.HandleFunc("/save", saveHandler)
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		fmt.Println("Failed to start server")
+	}
+
 }
