@@ -1,50 +1,39 @@
 package main
 
 import (
-	"encoding/json"
+	"database/sql"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-	"strconv"
-	"sync/atomic"
+	"log"
+
+	_ "github.com/lib/pq"
 )
 
-type payment struct {
-	//Описание
-	Description string `json:"description"`
-	//Сумма
-	USD int `json:"usd"`
+type User struct {
+	Id   int
+	Name string
 }
 
-var money = atomic.Int64{}
-var paymentHistory = make([]payment, 0)
-
-func payHandler(w http.ResponseWriter, r *http.Request) {
-	httpRequestBody, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-	var payment payment
-	json.Unmarshal(httpRequestBody, &payment)
-	if money.Load() >= int64(payment.USD) {
-		money.Add(int64(-payment.USD))
-		paymentHistory = append(paymentHistory, payment)
-		return
-	} else {
-		w.WriteHeader(http.StatusBadRequest)
-	}
-}
-func paymentHistoryHandler(w http.ResponseWriter, r *http.Request) {
-	for k, _ := range paymentHistory {
-		var element = "Description:" + paymentHistory[k].Description + "; usd:" + strconv.Itoa(paymentHistory[k].USD) + "\n"
-		w.Write([]byte(element))
-	}
-}
 func main() {
-	money.Add(1000)
-	http.HandleFunc("/pay", payHandler)
-	http.HandleFunc("/history", paymentHistoryHandler)
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	connStr := "user=postgres password=sar58yeaf dbname=postgres sslmode=disable"
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+	rows, err := db.Query("SELECT * FROM users")
+	if err != nil {
 		fmt.Println(err.Error())
+		return
+	}
+	defer rows.Close()
+	products := []User{}
+	for rows.Next() {
+		u := User{}
+		err := rows.Scan(&u.Id, &u.Name)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		products = append(products, u)
+		fmt.Println(u.Id, " - ", u.Name)
 	}
 }
