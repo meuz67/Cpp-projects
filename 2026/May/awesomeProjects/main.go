@@ -1,58 +1,50 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"io"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 	"sync/atomic"
 )
 
-var money = atomic.Int64{}
-var bankMoney = atomic.Int64{}
+type payment struct {
+	//Описание
+	Description string `json:"description"`
+	//Сумма
+	USD int `json:"usd"`
+}
 
-func pay(w http.ResponseWriter, req *http.Request) {
-	httpRequestBody, err := io.ReadAll(req.Body)
+var money = atomic.Int64{}
+var paymentHistory = make([]payment, 0)
+
+func payHandler(w http.ResponseWriter, r *http.Request) {
+	httpRequestBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		fmt.Println(err)
-		return
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	amount, err := strconv.Atoi(string(httpRequestBody))
-	if err != nil {
-		fmt.Println(err)
+	var payment payment
+	json.Unmarshal(httpRequestBody, &payment)
+	if money.Load() >= int64(payment.USD) {
+		money.Add(int64(-payment.USD))
+		paymentHistory = append(paymentHistory, payment)
 		return
-	}
-	if int64(amount) <= money.Load() {
-		w.WriteHeader(http.StatusOK)
-		money.Add(int64(-amount))
-		fmt.Println("money = ", money.Load())
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 }
-func saveMoney(w http.ResponseWriter, req *http.Request) {
-	httpRequestbody, err := io.ReadAll(req.Body)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	amount, err := strconv.Atoi(string(httpRequestbody))
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	if int64(amount) <= money.Load() {
-		money.Add(int64(-amount))
-		bankMoney.Add(int64(amount))
-		fmt.Println("money = ", money.Load(), "\n", "bankMoney = ", bankMoney.Load())
-	} else {
-		fmt.Println("Not enough money")
-		w.WriteHeader(http.StatusBadRequest)
+func paymentHistoryHandler(w http.ResponseWriter, r *http.Request) {
+	for k, _ := range paymentHistory {
+		var element = "Description:" + paymentHistory[k].Description + "; usd:" + strconv.Itoa(paymentHistory[k].USD) + "\n"
+		w.Write([]byte(element))
 	}
 }
 func main() {
 	money.Add(1000)
-	http.HandleFunc("/pay", pay)
-	http.HandleFunc("/saveMoney", saveMoney)
-	http.ListenAndServe(":8080", nil)
+	http.HandleFunc("/pay", payHandler)
+	http.HandleFunc("/history", paymentHistoryHandler)
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		fmt.Println(err.Error())
+	}
 }
