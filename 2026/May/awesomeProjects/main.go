@@ -1,39 +1,45 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
-	"log"
-
-	_ "github.com/lib/pq"
+	"html/template"
+	"net/http"
 )
 
 type User struct {
-	Id   int
-	Name string
+	FirstName string
+	LastName  string
+	Age       int
+}
+type Users struct {
+	Users []User
 }
 
+func handler(w http.ResponseWriter, r *http.Request) {
+	u1 := User{
+		FirstName: "John",
+		LastName:  "Doe",
+		Age:       25,
+	}
+	u2 := User{
+		FirstName: "Jane",
+		LastName:  "Doe",
+		Age:       45,
+	}
+	u3 := User{
+		FirstName: "Jane",
+		LastName:  "Doe",
+		Age:       67,
+	}
+	data := Users{
+		Users: []User{u1, u2, u3},
+	}
+	tmp := template.Must(template.ParseFiles("index.html"))
+	tmp.Execute(w, data)
+}
 func main() {
-	connStr := "user=postgres password=sar58yeaf dbname=postgres sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-	rows, err := db.Query("SELECT * FROM users")
-	if err != nil {
+	http.HandleFunc("/", handler)
+	if err := http.ListenAndServe(":8080", nil); err != nil {
 		fmt.Println(err.Error())
-		return
-	}
-	defer rows.Close()
-	products := []User{}
-	for rows.Next() {
-		u := User{}
-		err := rows.Scan(&u.Id, &u.Name)
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-		products = append(products, u)
-		fmt.Println(u.Id, " - ", u.Name)
 	}
 }

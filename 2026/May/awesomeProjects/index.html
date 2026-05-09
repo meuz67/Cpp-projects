@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Age</th>
+        </thead>
+        <tbody>
+        {{range .Users}}
+            <tr>
+                <th>{{.FirstName}}</th>
+                <th>{{.LastName}}</th>
+                <th>{{.Age}}</th>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+</body>
+</html>
