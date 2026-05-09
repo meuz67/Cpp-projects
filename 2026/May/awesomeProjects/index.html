@@ -2,24 +2,114 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Products</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.08);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .btn {
+            text-decoration: none;
+            background: #2563eb;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: .2s;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        thead {
+            background: #eff4ff;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 16px;
+        }
+
+        th {
+            color: #444;
+            font-size: 14px;
+        }
+
+        tbody tr {
+            border-top: 1px solid #edf0f5;
+            transition: .15s;
+        }
+
+        tbody tr:hover {
+            background: #fafcff;
+        }
+    </style>
 </head>
 <body>
+<div class="container">
+    <div class="header">
+        <h1>Products</h1>
+        <a href="/create" class="btn">Add product</a>
+    </div>
+
     <table>
         <thead>
-            <th>FirstName</th>
-            <th>LastName</th>
-            <th>Age</th>
+        <tr>
+            <th>Id</th>
+            <th>Model</th>
+            <th>Company</th>
+            <th>Price</th>
+        </tr>
         </thead>
+
         <tbody>
-        {{range .Users}}
-            <tr>
-                <th>{{.FirstName}}</th>
-                <th>{{.LastName}}</th>
-                <th>{{.Age}}</th>
-            </tr>
+        {{range .}}
+        <tr>
+            <td>{{.Id}}</td>
+            <td>{{.Model}}</td>
+            <td>{{.Company}}</td>
+            <td>${{.Price}}</td>
+        </tr>
         {{end}}
         </tbody>
     </table>
+</div>
 </body>
 </html>
