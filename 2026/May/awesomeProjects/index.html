@@ -2,114 +2,126 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Products</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            margin: 0;
-            background: #f5f7fb;
-            padding: 40px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 28px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,.08);
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 28px;
-        }
-
-        .btn {
-            text-decoration: none;
-            background: #2563eb;
-            color: white;
-            padding: 10px 16px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            transition: .2s;
-        }
-
-        .btn:hover {
-            background: #1d4ed8;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            overflow: hidden;
-            border-radius: 12px;
-        }
-
-        thead {
-            background: #eff4ff;
-        }
-
-        th, td {
-            text-align: left;
-            padding: 14px 16px;
-        }
-
-        th {
-            color: #444;
-            font-size: 14px;
-        }
-
-        tbody tr {
-            border-top: 1px solid #edf0f5;
-            transition: .15s;
-        }
-
-        tbody tr:hover {
-            background: #fafcff;
-        }
-    </style>
+    <title>Title</title>
 </head>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 24px;
+    font-family: Arial, sans-serif;
+    background: #f4f6fb;
+    color: #1f2937;
+  }
+
+  .table-container {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .toolbar {
+    margin-bottom: 12px;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .btn:hover {
+    background: #1d4ed8;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+
+  thead {
+    background: #111827;
+    color: #ffffff;
+  }
+
+  th, td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #f9fafb;
+  }
+
+  tbody tr:hover {
+    background: #eef2ff;
+  }
+
+  .actions a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+    margin-right: 10px;
+  }
+
+  .actions a:hover {
+    text-decoration: underline;
+  }
+
+  .sort-buttons {
+    margin-top: 14px;
+  }
+</style>
 <body>
-<div class="container">
-    <div class="header">
-        <h1>Products</h1>
-        <a href="/create" class="btn">Add product</a>
+  <div class="table-container">
+    <div class="toolbar">
+      <a class="btn" href="/create">Create</a>
     </div>
 
     <table>
-        <thead>
+      <thead>
         <tr>
-            <th>Id</th>
-            <th>Model</th>
-            <th>Company</th>
-            <th>Price</th>
+          <th>Id</th>
+          <th>Model</th>
+          <th>Company</th>
+          <th>Price</th>
+          <th>Actions</th>
         </tr>
-        </thead>
-
-        <tbody>
-        {{range .}}
+      </thead>
+      <tbody>
+      {{range .}}
         <tr>
-            <td>{{.Id}}</td>
-            <td>{{.Model}}</td>
-            <td>{{.Company}}</td>
-            <td>${{.Price}}</td>
+          <td>{{.Id}}</td>
+          <td>{{.Model}}</td>
+          <td>{{.Company}}</td>
+          <td>{{.Price}}</td>
+          <td class="actions">
+            <a href="/edit/{{.Id}}">Edit</a>
+            <a href="/delete/{{.Id}}">Delete</a>
+          </td>
         </tr>
-        {{end}}
-        </tbody>
+      {{end}}
+      </tbody>
     </table>
-</div>
+
+    <div class="sort-buttons">
+      <a class="btn" href="/?sort=price_asc">Sort by price ASC</a>
+      <a class="btn" href="/?sort=price_desc">Sort by price DESC</a>
+    </div>
+  </div>
 </body>
 </html>
