@@ -1,55 +1,72 @@
 #include <iostream>
-
-class Drib {
-public:
-    int chyselnik;
-    int znamennik;
-    void setDrib(int chyselnik, int znamennik) {
-        this->chyselnik = chyselnik;
-        this->znamennik = znamennik;
+#include <fstream>
+class Point {
+   private:
+    int x;
+    int y;
+    int z;
+    public:
+    void setX(int x) {
+        this->x = x;
     }
-    void getDrib() {
-        std::cout << "Drib chyselnik: " << chyselnik << std::endl;
-        std::cout << "Znamen chyselnik: " << znamennik << std::endl;
+    void setY(int y) {
+        this->y = y;
+    }
+    void setZ(int z) {
+        this->z = z;
+    }
+    int getX() {
+        return x;
+    }
+    int getY() {
+        return y;
+    }
+    int getZ() {
+        return z;
+    }
+    void input() {
+        std::cout << "Enter coordinates" << std::endl;
+        std::cout << "x:";
+        std::cin >> x;
+        std::cout << "y:";
+        std::cin >> y;
+        std::cout << "z:";
+        std::cin >> z;
+    }
+    void output() {
+        std::cout << "x:";
+        std::cout << x << std::endl;
+        std::cout << "y:";
+        std::cout << y << std::endl;
+        std::cout << "z:";
+        std::cout << z << std::endl;
+    }
+    void saveToFile(std::string fileName) {
+        std::ofstream file(fileName);
+        if (file.is_open()) {
+            file << this->getX() << " " << this->getY() << " " << this->getZ();
+        }else {
+            std::cout << "Unable to open file";
+        }
+        file.close();
+    }
+    void readFromFile(std::string fileName) {
+        std::ifstream file(fileName);
+        if (file.is_open()) {
+            file >> this->x >> this->y >> this->z;
+        }else {
+            std::cout << "Unable to open file";
+        }
+        file.close();
     }
 };
-Drib sumOfDribs(Drib first, Drib second) {
-    Drib result;
-    result.chyselnik = (first.chyselnik * second.znamennik) + (first.znamennik * second.chyselnik);
-    result.znamennik = first.znamennik * second.znamennik;
-    return result;
-}
-Drib differenceOfDribs(Drib first, Drib second) {
-    Drib result;
-    result.chyselnik = (first.chyselnik * second.znamennik) - (second.chyselnik * first.znamennik);
-    result.znamennik = first.znamennik * second.znamennik;
-    return result;
-}
-Drib pluralOfDribs(Drib first, Drib second) {
-    Drib result;
-    result.chyselnik = first.chyselnik * second.chyselnik;
-    result.znamennik = first.znamennik * second.znamennik;
-    return result;
-}
-Drib divisionOfDribs(Drib first, Drib second) {
-    Drib result;
-    result.chyselnik = first.chyselnik * second.znamennik;
-    result.znamennik = first.znamennik * second.chyselnik;
-    return result;
-}
 int main() {
-    Drib first;
-    first.setDrib(1, 2);
-    Drib second;
-    second.setDrib(3, 4);
-    Drib result;
-    result = sumOfDribs(first, second);
-    result.getDrib();
-    result = differenceOfDribs(first, second);
-    result.getDrib();
-    result = pluralOfDribs(first, second);
-    result.getDrib();
-    result = divisionOfDribs(first, second);
-    result.getDrib();
+    Point p1;
+    p1.input();
+    p1.output();
+    p1.saveToFile("points.txt");
+    Point p2;
+    p2.readFromFile("points.txt");
+    p2.output();
     return 0;
 }
