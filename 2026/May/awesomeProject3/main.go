@@ -2,8 +2,10 @@ package main
 
 import (
 	"awesomeProject3/featurePostgres/simple_connection"
+	"os"
 )
 
 func main() {
-	simple_connection.CheckConnection()
+	connStr := os.Getenv("connStr")
+	simple_connection.CheckConnection(connStr)
 }

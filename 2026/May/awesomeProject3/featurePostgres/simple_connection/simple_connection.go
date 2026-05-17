@@ -7,9 +7,9 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func CheckConnection() {
+func CheckConnection(connectionString string) {
 	ctx := context.Background()
-	db, err := pgx.Connect(ctx, "postgres://postgres:sar58yeaf@localhost:5432/postgres?sslmode=disable")
+	db, err := pgx.Connect(ctx, connectionString)
 	if err != nil {
 		panic(err)
 	}
