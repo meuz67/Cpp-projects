@@ -4,7 +4,8 @@ import (
 	"awesomeProject3/featurePostgres/simple_connection"
 	"awesomeProject3/featurePostgres/simple_sql"
 	"context"
-	"time"
+
+	"github.com/k0kubun/pp"
 )
 
 func main() {
@@ -13,9 +14,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	task := simple_sql.TaskModel{Title: "Other title",
-		Description: "Other description",
-		CreatedAt:   time.Now(),
+	tasks, _ := simple_sql.SelectRows(ctx, conn)
+	if tasks != nil {
+		for _, v := range tasks {
+			pp.Println(v)
+		}
 	}
-	simple_sql.InsertRow(ctx, conn, task)
 }
