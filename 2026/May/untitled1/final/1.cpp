@@ -1,38 +1,30 @@
 #include <iostream>
 #include <windows.h>
-class Bottle {
+#include <ctime>
+#include <cstdlib>
+#include <string>
+#include <fstream>
+class Wallet {
 private:
-    double capacity;
-    double currentVolume;
+    std::string currency;
+    double balance;
 public:
-    Bottle(double cap, double current) : capacity(cap), currentVolume(current) {
-        if (currentVolume > capacity) {
-            currentVolume = capacity;
-        }
+    Wallet(std::string currency, double balance) {
+        this->currency = currency;
+        this->balance = balance;
     }
-    void fill(double liters) {
-        if (this->currentVolume + liters <= this->capacity) {
-            this->currentVolume += liters;
-        } else {
-            this->currentVolume = this->capacity;
-        }
-    }
-    void getStatus() const {
-        std::cout << "Пляшка: об'єм = " << this->capacity
-                  << " л, поточна кількість води = " << this->currentVolume
-                  << " л." << std::endl;
-    }
+    friend std::ostream& operator<<(std::ostream& out, const Wallet& w);
 };
+std::ostream& operator<<(std::ostream& out, const Wallet& w) {
+    out << w.currency << " " << w.balance;
+    return out;
+}
 int main() {
-    SetConsoleOutputCP(CP_UTF8);
-    SetConsoleCP(CP_UTF8);
-    Bottle smallBottle(0.5, 0.2);
-    Bottle largeBottle(2.0, 1.5);
-    const Bottle ecoBottle(1.0, 0.7);
-    smallBottle.fill(0.2);
-    largeBottle.fill(1.0);
-    smallBottle.getStatus();
-    largeBottle.getStatus();
-    ecoBottle.getStatus();
+    SetConsoleOutputCP(1251);
+    SetConsoleCP(1251);
+    Wallet myWallet("грн", 1550.50);
+    std::cout << myWallet << std::endl;
+    Wallet dollarWallet("USD", 250);
+    std::cout << dollarWallet << std::endl;
     return 0;
 }

@@ -17,6 +17,10 @@ type Dog struct {
 	Name string `json:"name"`
 	Type string `json:"type"`
 }
+type Hamster struct {
+	Name string `json:"name"`
+	Type string `json:"type"`
+}
 
 func getCats(c echo.Context) error {
 	dataType := c.Param("data")
@@ -59,11 +63,21 @@ func addDog(c echo.Context) error {
 	return c.JSON(http.StatusOK, dog)
 }
 
+func addHamster(c echo.Context) error {
+	hamster := Hamster{}
+	err := c.Bind(&hamster)
+	if err != nil {
+		return c.String(http.StatusBadRequest, "Invalid JSON format")
+	}
+	return c.JSON(http.StatusOK, hamster)
+}
+
 func main() {
 	e := echo.New()
 	e.GET("/cats/:data", getCats)
 	e.POST("/cats", addCat)
 	e.POST("/dogs", addDog)
+	e.POST("/hamsters", addHamster)
 	if err := e.Start(":8080"); err != nil {
 		panic(err)
 	}
