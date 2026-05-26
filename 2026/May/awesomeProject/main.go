@@ -1,23 +1,16 @@
 package main
 
 import (
-	"awesomeProject/simple_sql/simple_action"
-	"awesomeProject/simple_sql/simple_connect"
-	"context"
+	"awesomeProject/http_server"
 	"fmt"
 )
 
 func main() {
-	ctx := context.Background()
-	db, err := simple_connect.Connect(ctx)
+	fmt.Println("started http server")
+	err := http_server.StartHttpServer()
 	if err != nil {
 		panic(err)
 	} else {
-		fmt.Println("Connected to database")
-	}
-	defer db.Close(ctx)
-	err = simple_action.DeleteTask(ctx, db, 2)
-	if err != nil {
-		panic(err)
+		fmt.Println("started http server")
 	}
 }

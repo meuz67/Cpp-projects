@@ -1,25 +1,35 @@
-#include <iostream>
-#include <cstring>
+\#include <iostream>
+#include <string>
 #include <windows.h>
-class Dish {
+using namespace std;
+
+class Book {
 private:
-    std::string name;
-    int time;
-    public:
-    Dish(std::string name, int time) {
-        this->name = name;
-        this->time = time;
+    string title;
+    int pages;
+public:
+    void setData(string t, int p) {
+        title = t;
+        pages = p;
     }
-    void print() {
-        std::cout << name << std::endl;
-        std::cout << time << std::endl;
+    void showInfo() {
+        cout << "Назва книги: " << title << endl;
+        cout << "Кількість сторінок: " << pages << endl;
     }
 };
 int main() {
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
-    Dish* dish = new Dish("dish", 10);
-    dish->print();
-    delete dish;
+    Book* book = new Book;
+    string title;
+    int pages;
+    cout << "Введіть назву книги: ";
+    getline(cin, title);
+    cout << "Введіть кількість сторінок: ";
+    cin >> pages;
+    book->setData(title, pages);
+    cout << endl;
+    book->showInfo();
+    delete book;
     return 0;
 }
