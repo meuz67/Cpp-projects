@@ -13,6 +13,10 @@ type Cat struct {
 	Name string `json:"name"`
 	Type string `json:"type"`
 }
+type Dog struct {
+	Name string `json:"name"`
+	Type string `json:"type"`
+}
 
 func getCats(c echo.Context) error {
 	dataType := c.Param("data")
@@ -33,6 +37,7 @@ func getCats(c echo.Context) error {
 
 func addCat(c echo.Context) error {
 	cat := Cat{}
+	defer c.Request().Body.Close()
 	b, err := ioutil.ReadAll(c.Request().Body)
 	if err != nil {
 		return c.String(http.StatusBadRequest, "Invalid request body")
@@ -44,10 +49,21 @@ func addCat(c echo.Context) error {
 	return c.JSON(http.StatusOK, cat)
 }
 
+func addDog(c echo.Context) error {
+	dog := Dog{}
+	defer c.Request().Body.Close()
+	err := json.NewDecoder(c.Request().Body).Decode(&dog)
+	if err != nil {
+		return c.String(http.StatusBadRequest, "Invalid JSON format")
+	}
+	return c.JSON(http.StatusOK, dog)
+}
+
 func main() {
 	e := echo.New()
 	e.GET("/cats/:data", getCats)
 	e.POST("/cats", addCat)
+	e.POST("/dogs", addDog)
 	if err := e.Start(":8080"); err != nil {
 		panic(err)
 	}
