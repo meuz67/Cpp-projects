@@ -1,0 +1,40 @@
+{{define "content"}}
+<div class="row justify-content-center">
+    <div class="col-md-5 col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h4 mb-4 text-center">Create account</h1>
+
+                {{if .Error}}
+                <div class="alert alert-danger" role="alert">{{.Error}}</div>
+                {{end}}
+
+                <form method="post" action="/register">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                               value="{{.FormUsername}}" required autofocus autocomplete="username"
+                               pattern="[a-zA-Z0-9_]{3,32}" title="3–32 letters, numbers, or underscore">
+                        <div class="form-text">3–32 characters: letters, numbers, underscore.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                               required minlength="6" autocomplete="new-password">
+                    </div>
+                    <div class="mb-4">
+                        <label for="password_confirm" class="form-label">Confirm password</label>
+                        <input type="password" class="form-control" id="password_confirm"
+                               name="password_confirm" required minlength="6" autocomplete="new-password">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Register</button>
+                </form>
+
+                <p class="text-center text-muted small mt-4 mb-0">
+                    Already have an account? <a href="/login">Login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}

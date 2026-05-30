@@ -1,0 +1,59 @@
+{{define "content"}}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">{{.Title}}</h1>
+    <a href="/tasks/new" class="btn btn-primary">+ New task</a>
+</div>
+
+{{if .Flash}}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{.Flash}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{end}}
+
+{{if .Error}}
+<div class="alert alert-danger" role="alert">{{.Error}}</div>
+{{end}}
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        {{if .Tasks}}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th scope="col" style="width: 4rem;">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col" style="width: 11rem;">Updated</th>
+                    <th scope="col" style="width: 10rem;" class="text-end">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{range .Tasks}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td class="fw-medium">{{.Title}}</td>
+                    <td class="text-muted">{{.Description}}</td>
+                    <td><small>{{.UpdatedAt.Format "2006-01-02 15:04"}}</small></td>
+                    <td class="text-end text-nowrap">
+                        <a href="/tasks/{{.ID}}/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+                        <form action="/tasks/{{.ID}}/delete" method="post" class="d-inline"
+                              onsubmit="return confirm('Delete this task?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+        </div>
+        {{else}}
+        <div class="text-center text-muted py-5">
+            <p class="mb-3">No tasks yet.</p>
+            <a href="/tasks/new" class="btn btn-primary">Create your first task</a>
+        </div>
+        {{end}}
+    </div>
+</div>
+{{end}}

@@ -1,0 +1,41 @@
+{{define "content"}}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="d-flex align-items-center mb-4">
+            <a href="/" class="btn btn-link text-decoration-none ps-0">&larr; Back</a>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h1 class="h4 mb-0">{{.Title}}</h1>
+            </div>
+            <div class="card-body">
+                {{if .Error}}
+                <div class="alert alert-danger" role="alert">{{.Error}}</div>
+                {{end}}
+
+                {{$isEdit := ne .Task.ID 0}}
+                <form method="post"
+                      action="{{if $isEdit}}/tasks/{{.Task.ID}}{{else}}/tasks{{end}}">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="title" name="title"
+                               value="{{.Task.Title}}" required maxlength="255" autofocus>
+                    </div>
+                    <div class="mb-4">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description"
+                                  rows="4">{{.Task.Description}}</textarea>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            {{if $isEdit}}Save changes{{else}}Create task{{end}}
+                        </button>
+                        <a href="/" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
