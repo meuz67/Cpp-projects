@@ -1,30 +1,57 @@
 #include <iostream>
-#include <windows.h>
-#include <ctime>
-#include <cstdlib>
 #include <string>
-#include <fstream>
-class Wallet {
+#include <windows.h>
+class Circle {
 private:
-    std::string currency;
-    double balance;
+    double radius;
 public:
-    Wallet(std::string currency, double balance) {
-        this->currency = currency;
-        this->balance = balance;
+    Circle(double r = 0.0) : radius(r) {};
+    double getRadius()const {
+        return radius;
     }
-    friend std::ostream& operator<<(std::ostream& out, const Wallet& w);
+    bool operator==(const Circle& c) const {
+        return radius == c.radius;
+    }
+    bool operator>(const Circle& c) const {
+        return radius > c.radius;
+    }
+    Circle& operator+=(double value) {
+        if (this->radius + value >= 0) {
+            this->radius += value;
+        } else {
+            this->radius = 0;
+        }
+        return *this;
+    }
+    Circle& operator-=(double value) {
+        if (this->radius - value >= 0) {
+            this->radius -= value;
+        } else {
+            this->radius = 0;
+        }
+        return *this;
+    }
 };
-std::ostream& operator<<(std::ostream& out, const Wallet& w) {
-    out << w.currency << " " << w.balance;
-    return out;
-}
 int main() {
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
-    Wallet myWallet("грн", 1550.50);
-    std::cout << myWallet << std::endl;
-    Wallet dollarWallet("USD", 250);
-    std::cout << dollarWallet << std::endl;
+    Circle c1(5.0);
+    Circle c2(7.5);
+    Circle c3(5.0);
+    std::cout << "Радиус круга 1: " << c1.getRadius() << "\n";
+    std::cout << "Радиус круга 2: " << c2.getRadius() << "\n";
+    std::cout << "Радиус круга 3: " << c3.getRadius() << "\n";
+    if (c1 == c3) {
+        std::cout << "Круг 1 равен кругу 3\n";
+    } else {
+        std::cout << "Круг 1 не равен кругу 3\n";
+    }
+    if (c2 > c1) {
+        std::cout << "Круг 2 больше круга 1\n";
+    }
+    c1 += 3.5;
+    std::cout << "Радиус круга 1 после += 3.5: " << c1.getRadius() << "\n";
+    c1 -= 2.0;
+    std::cout << "Радиус круга 1 после -= 2.0: " << c1.getRadius() << "\n";
     return 0;
 }

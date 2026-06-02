@@ -1,46 +1,66 @@
 #include <iostream>
-#include <windows.h>
-#include <ctime>
-#include <cstdlib>
 #include <string>
-#include <fstream>
-class Package {
+#include <windows.h>
+class BankAccount {
 private:
-    std::string name;
-    double weight;
-    double shippingCost;
+    std::string accountNumber;
+    double balance;
+    std::string ownerName;
 public:
-    Package(std::string n, double w, double cost) : name(n), weight(w), shippingCost(cost) {}
-    double getWeight() const {
-        return this->weight;
+    BankAccount(std::string number, std::string name, double initialBalance = 0.0)
+        : accountNumber(number), ownerName(name), balance(initialBalance) {}
+    std::string getAccountNumber() const { return accountNumber; }
+    std::string getOwnerName() const { return ownerName; }
+    double getBalance() const { return balance; }
+    bool operator==(const BankAccount& other) const {
+        return this->balance == other.balance;
     }
-    std::string getName() const {
-        return this->name;
+    bool operator>(const BankAccount& other) const {
+        return this->balance > other.balance;
     }
-    friend std::ostream& operator<<(std::ostream& os, const Package& pkg);
+    BankAccount& operator+=(double amount) {
+        if (amount > 0) {
+            this->balance += amount;
+        }
+        return *this;
+    }
+    BankAccount& operator-=(double amount) {
+        if (amount > 0 && this->balance >= amount) {
+            this->balance -= amount;
+        }
+        return *this;
+    }
+    BankAccount& operator++() {
+        this->balance += 100.0;
+        return *this;
+    }
+    BankAccount& operator--() {
+        this->balance -= 50.0;
+        return *this;
+    }
 };
-bool operator>(const Package& p1, const Package& p2) {
-    return p1.getWeight() > p2.getWeight();
-}
-std::ostream& operator<<(std::ostream& os, const Package& pkg) {
-    os << "Посилка \"" << pkg.name << "\" (Вага: " << pkg.weight
-       << " кг, Вартість доставки: " << pkg.shippingCost << " грн)";
-    return os;
-}
 int main() {
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
-    Package pkg1("Ноутбук", 2.5, 120.0);
-    Package pkg2("Крісло", 15.0, 450.0);
-    std::cout << pkg1 << std::endl;
-    std::cout << pkg2 << std::endl;
-    std::cout << "\nРезультат порівняння:" << std::endl;
-    if (pkg1 > pkg2) {
-        std::cout << "Посилка \"" << pkg1.getName() << "\" важча за посилку \"" << pkg2.getName() << "\"." << std::endl;
-    } else if (pkg2 > pkg1) {
-        std::cout << "Посилка \"" << pkg2.getName() << "\" важча за посилку \"" << pkg1.getName() << "\"." << std::endl;
-    } else {
-        std::cout << "Вага посилок однакова." << std::endl;
+    BankAccount acc1("UA12345", "Олександр", 1000.0);
+    BankAccount acc2("UA67890", "Максим", 1000.0);
+    BankAccount acc3("UA55555", "Дмитро", 2500.0);
+    std::cout << "Рахунок 1 (" << acc1.getOwnerName() << "): " << acc1.getBalance() << " грн\n";
+    std::cout << "Рахунок 2 (" << acc2.getOwnerName() << "): " << acc2.getBalance() << " грн\n";
+    std::cout << "Рахунок 3 (" << acc3.getOwnerName() << "): " << acc3.getBalance() << " грн\n\n";
+    if (acc1 == acc2) {
+        std::cout << "Баланси рахунків 1 та 2 рівні\n";
     }
+    if (acc3 > acc1) {
+        std::cout << "На рахунку 3 більше коштів, ніж на рахунку 1\n\n";
+    }
+    acc1 += 500.0;
+    std::cout << "Баланс рахунку 1 після += 500: " << acc1.getBalance() << " грн\n";
+    acc1 -= 300.0;
+    std::cout << "Баланс рахунку 1 після -= 300: " << acc1.getBalance() << " грн\n\n";
+    ++acc1;
+    std::cout << "Баланс рахунку 1 після ++ (бонус 100 грн): " << acc1.getBalance() << " грн\n";
+    --acc1;
+    std::cout << "Баланс рахунку 1 після -- (комісія 50 грн): " << acc1.getBalance() << " грн\n";
     return 0;
-};
+}
