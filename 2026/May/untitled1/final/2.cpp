@@ -1,60 +1,63 @@
 #include <iostream>
 #include <string>
 #include <windows.h>
-
-class Airplane {
+using namespace std;
+class WarehouseItem {
 private:
-    std::string type;
-    int currentPassengers;
-    int maxPassengers;
-
+    string name;
+    int quantity;
+    double price;
 public:
-    Airplane(std::string t, int max_p, int current_p = 0)
-        : type(t), maxPassengers(max_p), currentPassengers(current_p) {
-        if (currentPassengers > maxPassengers) {
-            currentPassengers = maxPassengers;
-        }
+    WarehouseItem(string n, int q, double p) {
+        name = n;
+        quantity = q;
+        price = p;
     }
-    std::string getType() const { return type; }
-    int getCurrentPassengers() const { return currentPassengers; }
-    int getMaxPassengers() const { return maxPassengers; }
-    bool operator==(const Airplane& other) const {
-        return this->type == other.type;
+    bool operator==(const WarehouseItem& other) {
+        return price == other.price;
     }
-    Airplane& operator++() {
-        if (this->currentPassengers < this->maxPassengers) {
-            this->currentPassengers++;
-        }
+    bool operator>(const WarehouseItem& other) {
+        return quantity > other.quantity;
+    }
+    WarehouseItem& operator++() {
+        quantity++;
         return *this;
     }
-    Airplane& operator--() {
-        if (this->currentPassengers > 0) {
-            this->currentPassengers--;
-        }
+    WarehouseItem& operator--() {
+        if (quantity > 0)
+            quantity--;
         return *this;
     }
-    bool operator>(const Airplane& other) const {
-        return this->maxPassengers > other.maxPassengers;
+    WarehouseItem& operator+=(int amount) {
+        quantity += amount;
+        return *this;
+    }
+    WarehouseItem& operator-=(int amount) {
+        quantity -= amount;
+        if (quantity < 0)
+            quantity = 0;
+        return *this;
+    }
+    void print() {
+        cout << name
+             << " | Кількість: " << quantity
+             << " | Ціна: " << price
+             << endl;
     }
 };
 int main() {
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
-    Airplane plane1("Boeing 737", 180, 178);
-    Airplane plane2("Airbus A320", 150, 100);
-    Airplane plane3("Boeing 737", 200, 50);
-    if (plane1 == plane3) {
-        std::cout << "Самолет 1 и Самолет 3 одного типа (" << plane1.getType() << ")\n";
-    }
-    if (plane3 > plane2) {
-        std::cout << plane3.getType() << " больше по вместимости, чем " << plane2.getType() << "\n";
-    }
-    std::cout << "Пассажиры самолета 1: " << plane1.getCurrentPassengers() << "\n";
-    ++plane1;
-    std::cout << "После ++plane1: " << plane1.getCurrentPassengers() << "\n";
-    ++plane1;
-    std::cout << "После еще одного ++plane1: " << plane1.getCurrentPassengers() << "\n";
-    --plane1;
-    std::cout << "После --plane1: " << plane1.getCurrentPassengers() << "\n";
+    WarehouseItem w1("Ноутбук",10,25000);
+    WarehouseItem w2("Миша",20,800);
+    w1.print();
+    w2.print();
+    cout << (w1 == w2) << endl;
+    cout << (w1 > w2) << endl;
+    ++w1;
+    --w1;
+    w1 += 15;
+    w1 -= 50;
+    w1.print();
     return 0;
 }

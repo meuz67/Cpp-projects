@@ -1,57 +1,63 @@
 #include <iostream>
 #include <string>
 #include <windows.h>
-class Circle {
+using namespace std;
+class Student {
 private:
-    double radius;
+    string name;
+    double average;
+    int absences;
 public:
-    Circle(double r = 0.0) : radius(r) {};
-    double getRadius()const {
-        return radius;
+    Student(string n, double a, int ab) {
+        name = n;
+        average = a;
+        absences = ab;
     }
-    bool operator==(const Circle& c) const {
-        return radius == c.radius;
+    bool operator==(const Student& other) {
+        return average == other.average;
     }
-    bool operator>(const Circle& c) const {
-        return radius > c.radius;
+    bool operator>(const Student& other) {
+        return average > other.average;
     }
-    Circle& operator+=(double value) {
-        if (this->radius + value >= 0) {
-            this->radius += value;
-        } else {
-            this->radius = 0;
-        }
+    Student& operator++() {
+        average += 0.5;
         return *this;
     }
-    Circle& operator-=(double value) {
-        if (this->radius - value >= 0) {
-            this->radius -= value;
-        } else {
-            this->radius = 0;
-        }
+    Student& operator--() {
+        absences++;
         return *this;
+    }
+    Student& operator+=(double points) {
+        average += points;
+        return *this;
+    }
+    Student& operator-=(double points) {
+        average -= points;
+        if (average < 0)
+            average = 0;
+
+        return *this;
+    }
+    void print() {
+        cout << name
+             << " | Бал: " << average
+             << " | Пропуски: " << absences
+             << endl;
     }
 };
 int main() {
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
-    Circle c1(5.0);
-    Circle c2(7.5);
-    Circle c3(5.0);
-    std::cout << "Радиус круга 1: " << c1.getRadius() << "\n";
-    std::cout << "Радиус круга 2: " << c2.getRadius() << "\n";
-    std::cout << "Радиус круга 3: " << c3.getRadius() << "\n";
-    if (c1 == c3) {
-        std::cout << "Круг 1 равен кругу 3\n";
-    } else {
-        std::cout << "Круг 1 не равен кругу 3\n";
-    }
-    if (c2 > c1) {
-        std::cout << "Круг 2 больше круга 1\n";
-    }
-    c1 += 3.5;
-    std::cout << "Радиус круга 1 после += 3.5: " << c1.getRadius() << "\n";
-    c1 -= 2.0;
-    std::cout << "Радиус круга 1 после -= 2.0: " << c1.getRadius() << "\n";
+    Student s1("Іван", 8.5, 2);
+    Student s2("Петро", 9.0, 1);
+    s1.print();
+    s2.print();
+    cout << (s1 == s2) << endl;
+    cout << (s1 > s2) << endl;
+    ++s1;
+    --s1;
+    s1 += 1;
+    s1 -= 0.5;
+    s1.print();
     return 0;
 }
