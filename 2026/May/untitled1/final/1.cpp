@@ -1,63 +1,31 @@
 #include <iostream>
 #include <string>
 #include <windows.h>
-using namespace std;
-class Student {
+template <typename T>
+class Car {
 private:
-    string name;
-    double average;
-    int absences;
+    std::string brand;
+    std::string color;
+    int year;
+    T price;
 public:
-    Student(string n, double a, int ab) {
-        name = n;
-        average = a;
-        absences = ab;
+    Car(std::string b, std::string c, int y, T p) : brand(b), color(c), year(y), price(p) {}
+    void ShowInfo() {
+        std::cout << "Марка: " << brand << ", Колір: " << color << ", Рік: " << year << ", Ціна: " << price << "\n";
     }
-    bool operator==(const Student& other) {
-        return average == other.average;
-    }
-    bool operator>(const Student& other) {
-        return average > other.average;
-    }
-    Student& operator++() {
-        average += 0.5;
-        return *this;
-    }
-    Student& operator--() {
-        absences++;
-        return *this;
-    }
-    Student& operator+=(double points) {
-        average += points;
-        return *this;
-    }
-    Student& operator-=(double points) {
-        average -= points;
-        if (average < 0)
-            average = 0;
-
-        return *this;
-    }
-    void print() {
-        cout << name
-             << " | Бал: " << average
-             << " | Пропуски: " << absences
-             << endl;
+    void IsExpensive() {
+        if (price > 1000000) {
+            std::cout << "Автомобіль є дорогим (ціна більше 1 000 000 грн).\n";
+        } else {
+            std::cout << "Автомобіль має помірну ціну.\n";
+        }
     }
 };
 int main() {
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
-    Student s1("Іван", 8.5, 2);
-    Student s2("Петро", 9.0, 1);
-    s1.print();
-    s2.print();
-    cout << (s1 == s2) << endl;
-    cout << (s1 > s2) << endl;
-    ++s1;
-    --s1;
-    s1 += 1;
-    s1 -= 0.5;
-    s1.print();
+    Car<double> myCar("Audi", "Чорний", 2022, 1250000.50);
+    myCar.ShowInfo();
+    myCar.IsExpensive();
     return 0;
 }

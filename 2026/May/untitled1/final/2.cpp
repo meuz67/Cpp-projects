@@ -1,63 +1,36 @@
 #include <iostream>
 #include <string>
 #include <windows.h>
-using namespace std;
-class WarehouseItem {
+template <typename T>
+class Smartphone {
 private:
-    string name;
-    int quantity;
-    double price;
+    std::string model;
+    std::string manufacturer;
+    int memoryGB;
+    T price;
+    double rating;
 public:
-    WarehouseItem(string n, int q, double p) {
-        name = n;
-        quantity = q;
-        price = p;
+    Smartphone(std::string m, std::string mf, int mem, T p, double r) : model(m), manufacturer(mf), memoryGB(mem), price(p), rating(r) {}
+    void ShowInfo() {
+        std::cout << "Виробник: " << manufacturer << ", Модель: " << model << ", Пам'ять: " << memoryGB << " GB, Ціна: " << price << ", Рейтинг: " << rating << "\n";
     }
-    bool operator==(const WarehouseItem& other) {
-        return price == other.price;
+    void IsRecommended() {
+        if (rating > 4.5) {
+            std::cout << "Смартфон рекомендовано до покупки!\n";
+        } else {
+            std::cout << "Смартфон має звичайний рейтинг.\n";
+        }
     }
-    bool operator>(const WarehouseItem& other) {
-        return quantity > other.quantity;
-    }
-    WarehouseItem& operator++() {
-        quantity++;
-        return *this;
-    }
-    WarehouseItem& operator--() {
-        if (quantity > 0)
-            quantity--;
-        return *this;
-    }
-    WarehouseItem& operator+=(int amount) {
-        quantity += amount;
-        return *this;
-    }
-    WarehouseItem& operator-=(int amount) {
-        quantity -= amount;
-        if (quantity < 0)
-            quantity = 0;
-        return *this;
-    }
-    void print() {
-        cout << name
-             << " | Кількість: " << quantity
-             << " | Ціна: " << price
-             << endl;
+    double PricePerGB() {
+        return static_cast<double>(price) / memoryGB;
     }
 };
 int main() {
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
-    WarehouseItem w1("Ноутбук",10,25000);
-    WarehouseItem w2("Миша",20,800);
-    w1.print();
-    w2.print();
-    cout << (w1 == w2) << endl;
-    cout << (w1 > w2) << endl;
-    ++w1;
-    --w1;
-    w1 += 15;
-    w1 -= 50;
-    w1.print();
+    Smartphone<int> phone("Galaxy S24", "Samsung", 256, 38000, 4.8);
+    phone.ShowInfo();
+    phone.IsRecommended();
+    std::cout << "Ціна за 1 GB: " << phone.PricePerGB() << " грн.\n";
     return 0;
 }
