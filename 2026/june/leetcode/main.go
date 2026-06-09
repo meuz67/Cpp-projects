@@ -2,24 +2,30 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 )
 
-func IsPalindrome(num int) bool {
-	str := strconv.Itoa(num)
-	left := 0
-	right := len(str) - 1
-	for left < right {
-		if str[left] != str[right] {
-			return false
-		}
-		left++
-		right--
+func RomanToInt(s string) int {
+	dictionary := map[byte]int{
+		'I': 1,
+		'V': 5,
+		'X': 10,
+		'L': 50,
+		'C': 100,
+		'D': 500,
+		'M': 1000,
 	}
-	return true
+	result := 0
+	n := len(s)
+	for i := 0; i < n; i++ {
+		currentVal := dictionary[s[i]]
+		if i < n-1 && currentVal < dictionary[s[i+1]] {
+			result -= currentVal
+		} else {
+			result += currentVal
+		}
+	}
+	return result
 }
-
 func main() {
-	number := 101
-	fmt.Println(IsPalindrome(number))
+	fmt.Println(RomanToInt("XVI"))
 }
