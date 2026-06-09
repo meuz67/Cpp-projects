@@ -1,16 +1,25 @@
 package main
 
-func twoSum(arr []int, target int) []int {
-	hash := make(map[int]int)
-	for i, val := range arr {
-		comp := target - val
-		if idx, isFound := hash[comp]; isFound {
-			return []int{idx, i}
-		}
-		hash[val] = i
-	}
-	return []int{-1, -1}
-}
-func main() {
+import (
+	"fmt"
+	"strconv"
+)
 
+func IsPalindrome(num int) bool {
+	str := strconv.Itoa(num)
+	left := 0
+	right := len(str) - 1
+	for left < right {
+		if str[left] != str[right] {
+			return false
+		}
+		left++
+		right--
+	}
+	return true
+}
+
+func main() {
+	number := 101
+	fmt.Println(IsPalindrome(number))
 }
