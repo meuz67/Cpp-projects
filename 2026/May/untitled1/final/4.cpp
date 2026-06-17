@@ -1,36 +1,28 @@
 #include <iostream>
 #include <string>
-#include <windows.h>
-template <typename T>
-class OnlineShop {
-private:
-    std::string productName;
-    std::string category;
-    int stockCount;
-    T pricePerUnit;
-    int soldCount;
+#include <Windows.h>
+using namespace std;
+class Singer {
 public:
-    OnlineShop(std::string name, std::string cat, int stock, T price, int sold) : productName(name), category(cat), stockCount(stock), pricePerUnit(price), soldCount(sold) {}
-    void ShowInfo() {
-        std::cout << "Товар: " << productName << ", Категорія: " << category << ", На складі: " << stockCount << ", Ціна: " << pricePerUnit << ", Продано: " << soldCount << "\n";
-    }
-    T ShowIncome() {
-        return pricePerUnit * soldCount;
-    }
-    void NeedRestock() {
-        if (stockCount < 10) {
-            std::cout << "Увага! На складі менше 10 одиниць товару. Потрібно поповнити запаси!\n";
-        } else {
-            std::cout << "Товару на складі достатньо.\n";
+    class Song {
+    public:
+        string title;
+        string genre;
+        double duration;
+        Song(string t = "", string g = "", double d = 0.0) : title(t), genre(g), duration(d) {}
+        void display() {
+            cout << title << " " << genre << " " << duration << endl;
         }
-    }
+    };
+    string name;
+    string country;
+    Song song;
+    Singer(string n, string c, string t, string g, double d) : name(n), country(c), song(t, g, d) {}
 };
 int main() {
-    SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
-    OnlineShop<double> shop("Ноутбук", "Електроніка", 5, 24500.0, 15);
-    shop.ShowInfo();
-    std::cout << "Дохід від продажів: " << shop.ShowIncome() << " грн.\n";
-    shop.NeedRestock();
+    SetConsoleOutputCP(1251);
+    Singer singer("Океан Ельзи", "Україна", "Обійми", "Рок", 3.45);
+    singer.song.display();
     return 0;
 }
